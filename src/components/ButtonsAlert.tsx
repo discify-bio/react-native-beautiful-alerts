@@ -21,67 +21,70 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, descript
     >
       <BlurView
         blurRadius={25}
-        style={styles.container}
       >
         <View
-          style={styles.wrapper}
+          style={styles.container}
         >
-          <Text
-            style={[
-              styles.title,
-              {
-                fontFamily: fonts.bold
-              }
-            ]}
+          <View
+            style={styles.wrapper}
           >
-            {title}
-          </Text>
-          {description && (
             <Text
               style={[
-                styles.description,
+                styles.title,
                 {
-                  fontFamily: fonts.regular
+                  fontFamily: fonts.bold
                 }
               ]}
             >
-              {description}
+              {title}
             </Text>
+            {description && (
+              <Text
+                style={[
+                  styles.description,
+                  {
+                    fontFamily: fonts.regular
+                  }
+                ]}
+              >
+                {description}
+              </Text>
+            )}
+          </View>
+          {buttons.length > 0 && (
+            <View
+              style={[styles.buttonsContainer, styles.borderTop]}
+            >
+              {buttons.map((button, i) => (
+                <TouchableOpacity
+                  onPress={() => buttonClick(button.onPress)}
+                  key={i}
+                  style={[
+                    styles.button, buttons.length === 2 && styles.buttonBetween,
+                    i === 0 && styles.buttonFirst,
+                    buttons.length > 2 && i > 0 && styles.borderTop
+                    ]}
+                    activeOpacity={0.6}
+                >
+                  <Text
+                    style={[
+                      styles.buttonText,
+                      {
+                        fontFamily: fonts.semiBold
+                      },
+                      (button.style === ButtonStyle.Bold || button.style === ButtonStyle.Cancel || button.style === ButtonStyle.Danger) && {
+                        fontFamily: fonts.extraBold
+                      },
+                      button.style === ButtonStyle.Danger && styles.buttonTextDanger
+                    ]}
+                  >
+                    {button.text}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           )}
         </View>
-        {buttons.length > 0 && (
-          <View
-            style={[styles.buttonsContainer, styles.borderTop]}
-          >
-            {buttons.map((button, i) => (
-              <TouchableOpacity
-                onPress={() => buttonClick(button.onPress)}
-                key={i}
-                style={[
-                  styles.button, buttons.length === 2 && styles.buttonBetween,
-                  i === 0 && styles.buttonFirst,
-                  buttons.length > 2 && i > 0 && styles.borderTop
-                  ]}
-                  activeOpacity={0.6}
-              >
-                <Text
-                  style={[
-                    styles.buttonText,
-                    {
-                      fontFamily: fonts.semiBold
-                    },
-                    (button.style === ButtonStyle.Bold || button.style === ButtonStyle.Cancel || button.style === ButtonStyle.Danger) && {
-                      fontFamily: fonts.extraBold
-                    },
-                    button.style === ButtonStyle.Danger && styles.buttonTextDanger
-                  ]}
-                >
-                  {button.text}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
       </BlurView>
     </View>
   )
