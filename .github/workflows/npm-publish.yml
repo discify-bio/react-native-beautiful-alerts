@@ -27,26 +27,28 @@ jobs:
         run: npm ci
       - name: Build package
         run: npm run build
-
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Get Repository code
-        uses: actions/checkout@v3
-      - name: Setup Node.JS
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          registry-url: https://registry.npmjs.org/
-      - name: Cache Deps
-        uses: actions/cache@v3
-        with: 
-          path: ~/.npm
-          key: node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Download Deps
-        run: npm ci
       - name: Publish new version on NPM
         run: npm publish
+
+  # publish-npm:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Get Repository code
+  #       uses: actions/checkout@v3
+  #     - name: Setup Node.JS
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #         registry-url: https://registry.npmjs.org/
+  #     - name: Cache Deps
+  #       uses: actions/cache@v3
+  #       with: 
+  #         path: ~/.npm
+  #         key: node-modules-${{ hashFiles('**/package-lock.json') }}
+  #     - name: Download Deps
+  #       run: npm ci
+  #     - name: Publish new version on NPM
+  #       run: npm publish
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
