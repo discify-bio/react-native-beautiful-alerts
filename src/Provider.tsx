@@ -31,7 +31,22 @@ const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts 
     setTitle(title)
     setDescription(description || null)
     setType(type ?? AlertType.Regular)
-    setButtons(buttons?.sort((a, b) => (buttons.length > 2 ? a.style : b?.style) === ButtonStyle.Cancel ? 1 : -1) || [{ text: 'OK', style: ButtonStyle.Bold }])
+
+    if (buttons) {
+      const cancelButtonOnList = buttons.find(button => button.style === ButtonStyle.Cancel)
+      if (!cancelButtonOnList) return setButtons(buttons)
+
+      const filteredButtons = buttons.filter(button => button.style !== ButtonStyle.Cancel)
+      if (buttons.length > 2) {
+        filteredButtons.push(cancelButtonOnList)
+      } else {
+        filteredButtons.unshift(cancelButtonOnList)
+      }
+      
+      setButtons(filteredButtons)
+    } else {
+      setButtons([{ text: 'OK', style: ButtonStyle.Bold }])
+    }
   }
 
   const start = ({ nativeEvent: { layout: { height } } }: LayoutChangeEvent) => {
