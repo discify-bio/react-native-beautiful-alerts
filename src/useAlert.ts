@@ -5,7 +5,7 @@ const useAlert = () => {
   const alertContext = useContext(Context)
   const alert = useMemo(() => {
     return alertContext.current
-  }, [alertContext])
+  }, [alertContext.current])
   return alert
 }
 
