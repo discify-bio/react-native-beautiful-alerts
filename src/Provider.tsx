@@ -7,7 +7,7 @@ import { theme } from './constants/theme'
 import Context from './Context'
 import { AlertController, AlertMethods, AlertProps, AlertType, AlertWithButtonProps, ButtonStyle, AlertButton, ProviderProps } from './types'
 
-const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts }) => {
+const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts, meta }) => {
   const opacity = useRef(new Animated.Value(0)).current
   const [height, setHeight] = useState(0)
 
@@ -138,6 +138,7 @@ const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts 
                 }}
                 onLayout={start}
                 fonts={fonts}
+                meta={meta}
               />
               {isOpen && (
                 <Animated.View
@@ -160,6 +161,7 @@ const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts 
                     buttons={buttons}
                     buttonClick={buttonClick}
                     fonts={fonts}
+                    meta={meta}
                   />
                 </Animated.View>
               )}
@@ -177,6 +179,7 @@ const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts 
                   left: 10000
                 }}
                 fonts={fonts}
+                meta={meta}
               />
               {isOpen && (
                 <DefaultAlert
@@ -188,6 +191,7 @@ const Provider: React.FC<PropsWithChildren<ProviderProps>> = ({ children, fonts 
                     opacity: opacity as any
                   }}
                   fonts={fonts}
+                  meta={meta}
                 />
               )}
             </>

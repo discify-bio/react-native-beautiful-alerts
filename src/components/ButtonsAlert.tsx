@@ -7,7 +7,7 @@ import { ButtonStyle, Props, ProviderProps } from '../types'
 const width = Dimensions.get('window').width
 const padding = width * 10 / 100
 
-const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, description, buttonClick, buttons, style, onLayout, fonts }) => {
+const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, description, buttonClick, buttons, style, onLayout, fonts, meta }) => {
   return (
     <View
       style={[
@@ -18,13 +18,17 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, descript
         style
       ]}
       onLayout={onLayout}
-      pointerEvents='none'
     >
       <BlurView
         blurRadius={25}
       >
         <View
-          style={styles.container}
+          style={[
+            styles.container,
+            {
+              backgroundColor: meta.backgroundColor || styles.container.backgroundColor
+            }
+          ]}
         >
           <View
             style={styles.wrapper}
@@ -33,7 +37,9 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, descript
               style={[
                 styles.title,
                 {
-                  fontFamily: fonts.bold
+                  fontFamily: fonts.bold,
+                  fontSize: meta.titleFontSize || styles.title.fontSize,
+                  color: meta.defaultColor || styles.title.color
                 }
               ]}
             >
@@ -44,7 +50,9 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, descript
                 style={[
                   styles.description,
                   {
-                    fontFamily: fonts.regular
+                    fontFamily: fonts.regular,
+                    color: meta.defaultColor || styles.description.color,
+                    fontSize: meta.descriptionFontSize || styles.description.fontSize
                   }
                 ]}
               >
@@ -71,12 +79,17 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, descript
                     style={[
                       styles.buttonText,
                       {
-                        fontFamily: fonts.semiBold
+                        fontFamily: fonts.semiBold,
+                        fontSize: meta.buttonFontSize || styles.buttonText.fontSize,
+                        color: meta.defaultColor || styles.buttonText.color
                       },
                       (button.style === ButtonStyle.Bold || button.style === ButtonStyle.Cancel || button.style === ButtonStyle.Danger) && {
                         fontFamily: fonts.extraBold
                       },
-                      button.style === ButtonStyle.Danger && styles.buttonTextDanger
+                      button.style === ButtonStyle.Danger && {
+                        ...styles.buttonTextDanger,
+                        color: meta.dangerColor || styles.buttonTextDanger.color
+                      }
                     ]}
                   >
                     {button.text}

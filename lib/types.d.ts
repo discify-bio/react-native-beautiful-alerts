@@ -52,6 +52,15 @@ export interface FontsProps {
     bold: string;
     extraBold: string;
 }
+export interface StyleProps {
+    backgroundColor?: string;
+    dangerColor?: string;
+    defaultColor?: string;
+    buttonFontSize?: number;
+    titleFontSize?: number;
+    descriptionFontSize?: number;
+}
 export interface ProviderProps {
     fonts: FontsProps;
+    meta: StyleProps;
 }

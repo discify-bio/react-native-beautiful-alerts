@@ -11,7 +11,7 @@ import { AlertType, DefaultProps, ProviderProps } from '../types'
 const width = Dimensions.get('window').width
 const padding = width * 10 / 100
 
-const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, description, style, onLayout, type, fonts }) => {
+const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, description, style, onLayout, type, fonts, meta }) => {
   const getIcon = () => {
     switch (type) {
       case AlertType.Success:
@@ -39,7 +39,12 @@ const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, d
     >
       <BlurView
         blurRadius={25}
-        style={styles.container}
+        style={[
+          styles.container,
+          {
+            backgroundColor: meta.backgroundColor || styles.container.backgroundColor
+          }
+        ]}
       >
         <View
           style={styles.wrapper}
@@ -49,7 +54,9 @@ const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, d
             style={[
               styles.title,
               {
-                fontFamily: fonts.bold || undefined
+                fontFamily: fonts.bold || undefined,
+                color: meta.defaultColor || styles.title.color,
+                fontSize: styles.title.fontSize || meta.titleFontSize
               }
             ]}
           >
@@ -60,7 +67,9 @@ const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, d
               style={[
                 styles.description,
                 {
-                  fontFamily: fonts.regular || undefined
+                  fontFamily: fonts.regular || undefined,
+                  color: meta.defaultColor || styles.description.color,
+                  fontSize: styles.description.fontSize || meta.descriptionFontSize
                 }
               ]}
             >
