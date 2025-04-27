@@ -1,12 +1,9 @@
-import { useContext, useMemo } from 'react'
+import { useContext } from 'react'
 import Context from './Context'
 
 const useAlert = () => {
   const alertContext = useContext(Context)
-  const alert = useMemo(() => {
-    return alertContext.current
-  }, [alertContext.current])
-  return alert
+  return alertContext.current
 }
 
 export default useAlert

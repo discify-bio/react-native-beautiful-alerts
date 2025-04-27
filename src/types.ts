@@ -43,7 +43,6 @@ export interface AlertMethods {
 }
 
 export interface DefaultProps {
-  height: number
   title: string | null
   description: string | null
   style?: StyleProp<ViewStyle>

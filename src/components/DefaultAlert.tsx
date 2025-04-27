@@ -1,7 +1,8 @@
 import { BlurView } from '@react-native-community/blur'
-import React from 'react'
+import React, { useMemo } from 'react'
 
-import { Animated, Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import Animated from 'react-native-reanimated'
 import Error from '../animations/Error'
 import Success from '../animations/Success'
 import Warning from '../animations/Warning'
@@ -11,8 +12,8 @@ import { AlertType, DefaultProps, ProviderProps } from '../types'
 const width = Dimensions.get('window').width
 const padding = width * 10 / 100
 
-const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, description, style, onLayout, type, fonts, meta }) => {
-  const getIcon = () => {
+const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ title, description, style, onLayout, type, fonts, meta }) => {
+  const getIcon = useMemo(() => {
     switch (type) {
       case AlertType.Success:
         return <Success/>
@@ -23,61 +24,65 @@ const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ height, title, d
       default:
         return null
     }
-  }
+  }, [type])
+
+  const titleStyle = useMemo(() => [
+    styles.title,
+    {
+      fontFamily: fonts.bold || undefined,
+      color: meta.defaultColor || styles.title.color,
+      fontSize: styles.title.fontSize || meta.titleFontSize
+    }
+  ], [fonts.bold, meta.defaultColor, meta.titleFontSize])
+
+  const descriptionStyle = useMemo(() => [
+    styles.description,
+    {
+      fontFamily: fonts.regular || undefined,
+      color: meta.defaultColor || styles.description.color,
+      fontSize: styles.description.fontSize || meta.descriptionFontSize
+    }
+  ], [fonts.regular, meta.defaultColor, meta.descriptionFontSize])
+
+  const blurViewStyle = useMemo((): ViewStyle => ({
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0,
+    backgroundColor: meta.backgroundColor || styles.container.backgroundColor
+  }), [meta.backgroundColor])
 
   return (
     <Animated.View
       style={[
-        {
-          ...styles.alert,
-          top: (Dimensions.get('window').height / 2) - (height / 2),
-        },
+        styles.alert,
         style
       ]}
       onLayout={onLayout}
       pointerEvents='none'
     >
-      <BlurView
-        blurRadius={25}
-        style={[
-          styles.container,
-          {
-            backgroundColor: meta.backgroundColor || styles.container.backgroundColor
-          }
-        ]}
+      <View
+        style={styles.container}
       >
+        <BlurView
+          blurRadius={25}
+          style={blurViewStyle}
+        />
         <View
           style={styles.wrapper}
         >
-          {getIcon()}
-          <Text
-            style={[
-              styles.title,
-              {
-                fontFamily: fonts.bold || undefined,
-                color: meta.defaultColor || styles.title.color,
-                fontSize: styles.title.fontSize || meta.titleFontSize
-              }
-            ]}
-          >
+          {getIcon}
+          <Text style={titleStyle}>
             {title}
           </Text>
           {description && (
-            <Text
-              style={[
-                styles.description,
-                {
-                  fontFamily: fonts.regular || undefined,
-                  color: meta.defaultColor || styles.description.color,
-                  fontSize: styles.description.fontSize || meta.descriptionFontSize
-                }
-              ]}
-            >
+            <Text style={descriptionStyle}>
               {description}
             </Text>
           )}
         </View>
-      </BlurView>
+      </View>
     </Animated.View>
   )
 }
@@ -87,7 +92,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: width - (padding * 2),
     left: padding,
-    top: Dimensions.get('window').height / 2,
     borderRadius: 14,
     overflow: 'hidden'
   },
@@ -104,7 +108,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     width: '100%',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
+    zIndex: 2
   },
   title: {
     fontSize: 18,
@@ -122,4 +127,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DefaultAlert
+export default React.memo(DefaultAlert)

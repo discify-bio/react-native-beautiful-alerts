@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import { ProviderProps } from './types';
-declare const Provider: React.FC<PropsWithChildren<ProviderProps>>;
-export default Provider;
+declare const _default: React.NamedExoticComponent<React.PropsWithChildren<ProviderProps>>;
+export default _default;

@@ -1,61 +1,68 @@
 import { BlurView } from '@react-native-community/blur'
-import React from 'react'
-import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useMemo } from 'react'
+import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import Animated from 'react-native-reanimated'
 import { theme } from '../constants/theme'
 import { ButtonStyle, Props, ProviderProps } from '../types'
 
-const width = Dimensions.get('window').width
-const padding = width * 10 / 100
+const ButtonsAlert: React.FC<Props & ProviderProps> = ({ title, description, buttonClick, buttons, style, onLayout, fonts, meta }) => {
+  const blurViewStyle = useMemo((): ViewStyle => ({
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    top: 0
+  }), [])
 
-const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, description, buttonClick, buttons, style, onLayout, fonts, meta }) => {
+  const containerStyle = useMemo(() => [
+    styles.container,
+    {
+      backgroundColor: meta.backgroundColor || styles.container.backgroundColor
+    }
+  ], [meta.backgroundColor])
+
+  const titleStyle = useMemo(() => [
+    styles.title,
+    {
+      fontFamily: fonts.bold,
+      fontSize: meta.titleFontSize || styles.title.fontSize,
+      color: meta.defaultColor || styles.title.color
+    }
+  ], [fonts.bold, meta.defaultColor, meta.titleFontSize])
+
+  const descriptionStyle = useMemo(() => [
+    styles.description,
+    {
+      fontFamily: fonts.regular,
+      color: meta.defaultColor || styles.description.color,
+      fontSize: meta.descriptionFontSize || styles.description.fontSize
+    }
+  ], [fonts.regular, meta.defaultColor, meta.descriptionFontSize])
+
   return (
-    <View
+    <Animated.View
       style={[
-        {
-          ...styles.alert,
-          top: (Dimensions.get('window').height / 2) - (height / 2)
-        },
+        styles.alert,
         style
       ]}
       onLayout={onLayout}
     >
-      <BlurView
-        blurRadius={25}
-      >
+      <View style={{ width: '100%' }}>
+        <BlurView
+          blurRadius={25}
+          style={blurViewStyle}
+        />
         <View
-          style={[
-            styles.container,
-            {
-              backgroundColor: meta.backgroundColor || styles.container.backgroundColor
-            }
-          ]}
+          style={containerStyle}
         >
           <View
             style={styles.wrapper}
           >
-            <Text
-              style={[
-                styles.title,
-                {
-                  fontFamily: fonts.bold,
-                  fontSize: meta.titleFontSize || styles.title.fontSize,
-                  color: meta.defaultColor || styles.title.color
-                }
-              ]}
-            >
+            <Text style={titleStyle}>
               {title}
             </Text>
             {description && (
-              <Text
-                style={[
-                  styles.description,
-                  {
-                    fontFamily: fonts.regular,
-                    color: meta.defaultColor || styles.description.color,
-                    fontSize: meta.descriptionFontSize || styles.description.fontSize
-                  }
-                ]}
-              >
+              <Text style={descriptionStyle}>
                 {description}
               </Text>
             )}
@@ -65,51 +72,88 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ height, title, descript
               style={[styles.buttonsContainer, styles.borderTop]}
             >
               {buttons.map((button, i) => (
-                <TouchableOpacity
-                  onPress={() => buttonClick(button.onPress)}
+                <ButtonItem 
                   key={i}
-                  style={[
-                    styles.button, buttons.length === 2 && styles.buttonBetween,
-                    i === 0 && styles.buttonFirst,
-                    buttons.length > 2 && i > 0 && styles.borderTop
-                    ]}
-                    activeOpacity={0.6}
-                >
-                  <Text
-                    style={[
-                      styles.buttonText,
-                      {
-                        fontFamily: fonts.semiBold,
-                        fontSize: meta.buttonFontSize || styles.buttonText.fontSize,
-                        color: meta.defaultColor || styles.buttonText.color
-                      },
-                      (button.style === ButtonStyle.Bold || button.style === ButtonStyle.Cancel || button.style === ButtonStyle.Danger) && {
-                        fontFamily: fonts.extraBold
-                      },
-                      button.style === ButtonStyle.Danger && {
-                        ...styles.buttonTextDanger,
-                        color: meta.dangerColor || styles.buttonTextDanger.color
-                      }
-                    ]}
-                  >
-                    {button.text}
-                  </Text>
-                </TouchableOpacity>
+                  button={button} 
+                  buttonClick={buttonClick}
+                  index={i}
+                  totalButtons={buttons.length}
+                  fonts={fonts}
+                  meta={meta}
+                />
               ))}
             </View>
           )}
         </View>
-      </BlurView>
-    </View>
+      </View>
+    </Animated.View>
   )
 }
 
+interface ButtonItemProps {
+  button: {
+    text: string
+    style: ButtonStyle
+    onPress?: () => any
+  }
+  buttonClick: (callback?: () => any) => any
+  index: number
+  totalButtons: number
+  fonts: {
+    semiBold: string
+    regular: string
+    bold: string
+    extraBold: string
+  }
+  meta: {
+    backgroundColor?: string
+    dangerColor?: string
+    defaultColor?: string
+    buttonFontSize?: number
+    titleFontSize?: number
+    descriptionFontSize?: number
+  }
+}
+
+const ButtonItem = React.memo(({ button, buttonClick, index, totalButtons, fonts, meta }: ButtonItemProps) => {
+  const buttonStyle = useMemo(() => [
+    styles.button, 
+    totalButtons === 2 && styles.buttonBetween,
+    index === 0 && styles.buttonFirst,
+    totalButtons > 2 && index > 0 && styles.borderTop
+  ], [index, totalButtons])
+
+  const textStyle = useMemo(() => [
+    styles.buttonText,
+    {
+      fontFamily: fonts.semiBold,
+      fontSize: meta.buttonFontSize || styles.buttonText.fontSize,
+      color: meta.defaultColor || styles.buttonText.color
+    },
+    (button.style === ButtonStyle.Bold || button.style === ButtonStyle.Cancel || button.style === ButtonStyle.Danger) && {
+      fontFamily: fonts.extraBold
+    },
+    button.style === ButtonStyle.Danger && {
+      ...styles.buttonTextDanger,
+      color: meta.dangerColor || styles.buttonTextDanger.color
+    }
+  ], [button.style, fonts.extraBold, fonts.semiBold, meta.buttonFontSize, meta.dangerColor, meta.defaultColor])
+
+  return (
+    <TouchableOpacity
+      onPress={() => buttonClick(button.onPress)}
+      style={buttonStyle}
+      activeOpacity={0.6}
+    >
+      <Text style={textStyle}>
+        {button.text}
+      </Text>
+    </TouchableOpacity>
+  )
+})
+
 const styles = StyleSheet.create({
   alert: {
-    position: 'absolute',
-    width: width - (padding * 2),
-    left: padding,
-    top: Dimensions.get('window').height / 2,
     borderRadius: 14,
     overflow: 'hidden'
   },
@@ -179,4 +223,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ButtonsAlert
+export default React.memo(ButtonsAlert)

@@ -35,7 +35,6 @@ export interface AlertMethods {
     warning: (props: AlertProps) => void;
 }
 export interface DefaultProps {
-    height: number;
     title: string | null;
     description: string | null;
     style?: StyleProp<ViewStyle>;
