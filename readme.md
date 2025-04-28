@@ -1,155 +1,197 @@
-<a name="readme-top"></a>
+# React Native Beautiful Alerts
 
-<br />
-<div align="center">
-  <h3 align="center">React Native Beautiful Alerts</h3>
-  <p align="center">
-    An Awesome alerts for your projects
-    <br />
-    <a href="https://snack.expo.dev/t4rl9bWi0">View Demo</a>
-    ·
-    <a href="https://github.com/discify-bio/react-native-beautiful-alerts/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/discify-bio/react-native-beautiful-alerts/issues">Request Feature</a>
-  </p>
-</div>
+A modern, customizable alert system for React Native applications with beautiful animations and flexible styling options.
 
+[![npm version](https://img.shields.io/npm/v/react-native-beautiful-alerts.svg)](https://www.npmjs.com/package/react-native-beautiful-alerts)
+[![license](https://img.shields.io/npm/l/react-native-beautiful-alerts.svg)](https://github.com/discify-bio/react-native-beautiful-alerts/blob/main/LICENSE)
 
+<p align="center">
+  <a href="https://snack.expo.dev/t4rl9bWi0">View Live Demo</a> •
+  <a href="https://github.com/discify-bio/react-native-beautiful-alerts/issues">Report Bug</a> •
+  <a href="https://github.com/discify-bio/react-native-beautiful-alerts/issues">Request Feature</a>
+</p>
 
-<details>
-  <summary>Menu</summary>
-  <ol>
-	  <li>
-      <a href="#getting-started">Screenshots</a>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#installation">Installation</a></li>
-        <li><a href="#define-app">Define app</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-  </ol>
-</details>
+## Features
 
+- 🎨 Multiple alert types: success, error, warning, and custom messages
+- ⚡ Smooth animations with Lottie integration
+- 🎛️ Customizable buttons with different styles
+- 🔧 Flexible styling options
+- 📱 Works on both iOS and Android
 
+## Installation
 
-<!-- ABOUT THE PROJECT -->
-## Screenshort
+Install the package:
 
+```sh
+npm install react-native-beautiful-alerts
+```
 
+or
 
+```sh
+yarn add react-native-beautiful-alerts
+```
 
+Also install required peer dependencies:
 
-<!-- GETTING STARTED -->
-## Getting Started
+```sh
+npm install @react-native-community/blur lottie-react-native lottie-ios react-native-portalize react-native-reanimated
+```
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+or 
 
-### Installation
+```sh
+yarn add @react-native-community/blur lottie-react-native lottie-ios react-native-portalize react-native-reanimated
+```
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install react-native-beautiful-alerts
-  ```
+## Setup
 
-### Define app
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+Wrap your app with the `Provider` component:
 
 ```typescript
 import { Provider } from 'react-native-beautiful-alerts'
 
 const App = () => {
-	return (
-		<Provider>
-			<Routes/>
-		</Provider>
-	)
+  return (
+    <Provider>
+      <YourApp />
+    </Provider>
+  )
 }
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
 ## Usage
+
+### Basic Alerts
+
+Show simple alerts with automatic dismissal:
+
+```typescript
+import { useAlert } from 'react-native-beautiful-alerts'
+
+const MyComponent = () => {
+  const alert = useAlert()
+
+  const showSuccessAlert = () => {
+    alert.success({
+      title: 'Success!',
+      description: 'Your action completed successfully'
+    })
+  }
+
+  const showErrorAlert = () => {
+    alert.error({
+      title: 'Error',
+      description: 'Something went wrong'
+    })
+  }
+
+  const showWarningAlert = () => {
+    alert.warning({
+      title: 'Warning',
+      description: 'Please check your input'
+    })
+  }
+
+  return (
+    <View>
+      <TouchableOpacity onPress={showSuccessAlert}>
+        <Text>Show Success Alert</Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
+```
+
+### Custom Alerts with Buttons
+
+Create alerts with custom buttons and actions:
 
 ```typescript
 import { useAlert, ButtonStyle } from 'react-native-beautiful-alerts'
 
-const Component = () => {
-	const alert = useAlert()
+const MyComponent = () => {
+  const alert = useAlert()
 
-	// Show Alert Without Buttons
-	const showAlertWithoutButtons = () => {
-		alert.success({
-			title: 'Success!',
-			description: 'The description'
-		})
-		// Available types: error, warning, success
-	}
-	
-	// Show Alert With Buttons
-	const showAlertWithButtons = () => {
-		alert.message({
-			title: 'Title',
-			description: 'Select an action',
-			buttons: [
-				{
-					text: 'Click',
-					style: ButtonStyle.Regular,
-					onPress: () => console.log('Pressed!')
-				},
-				{
-					text: 'Cancel',
-					style: ButtonStyle.Cancel,
-					onPress: () => console.log('Pressed!')
-				},
-				{
-					text: 'Bold',
-					style: ButtonStyle.Bold,
-					onPress: () => console.log('Pressed!')
-				},
-				{
-					text: 'Danger',
-					style: ButtonStyle.Danger,
-					onPress: () => console.log('Pressed!')
-				}
-			]
-		})
-	}
-	return (
-		<View>
-			<TouchableOpacity
-				onPress={showAlertWithoutButtons}
-			>
-				<Text>Show Success Alert</Text>
-			</TouchableOpacity>
-			<TouchableOpacity
-				onPress={showAlertWithButtons}
-			>
-				<Text>Show Alert with Buttons</Text>
-			</TouchableOpacity>
-		</View>
-	)
+  const showCustomAlert = () => {
+    alert.message({
+      title: 'Custom Alert',
+      description: 'Choose an action',
+      buttons: [
+        {
+          text: 'Cancel',
+          style: ButtonStyle.Cancel,
+          onPress: () => console.log('Cancelled')
+        },
+        {
+          text: 'Confirm',
+          style: ButtonStyle.Bold,
+          onPress: () => console.log('Confirmed')
+        },
+        {
+          text: 'Delete',
+          style: ButtonStyle.Danger,
+          onPress: () => console.log('Deleted')
+        }
+      ]
+    })
+  }
+
+  return (
+    <View>
+      <TouchableOpacity onPress={showCustomAlert}>
+        <Text>Show Custom Alert</Text>
+      </TouchableOpacity>
+    </View>
+  )
 }
 ```
 
-See the [open issues](https://github.com/discify-bio/react-native-beautiful-alerts/issues) for a full list of proposed features (and known issues).
+### Button Styles
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Available button styles:
 
+- `ButtonStyle.Regular` - Standard button
+- `ButtonStyle.Bold` - Bold/Primary button
+- `ButtonStyle.Cancel` - Cancel button (positioned first or last depending on number of buttons)
+- `ButtonStyle.Danger` - Destructive action button
 
+## Customization
 
-<!-- CONTRIBUTING -->
+You can customize fonts and styles by passing props to the Provider:
+
+```typescript
+<Provider
+  fonts={{
+    regular: 'YourFontRegular',
+    semiBold: 'YourFontSemiBold',
+    bold: 'YourFontBold',
+    extraBold: 'YourFontExtraBold'
+  }}
+  meta={{
+    backgroundColor: '#FFFFFF',
+    dangerColor: '#FF3B30',
+    defaultColor: '#007AFF',
+    buttonFontSize: 16,
+    titleFontSize: 18,
+    descriptionFontSize: 14
+  }}
+>
+  <YourApp />
+</Provider>
+```
+
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome! If you have ideas for improvements or find any issues, please open an issue or submit a pull request.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+Distributed under the ISC License. See `LICENSE` for more information.
