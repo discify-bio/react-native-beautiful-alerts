@@ -24,25 +24,7 @@ A modern, customizable alert system for React Native applications with beautiful
 Install the package:
 
 ```sh
-npm install react-native-beautiful-alerts
-```
-
-or
-
-```sh
-yarn add react-native-beautiful-alerts
-```
-
-Also install required peer dependencies:
-
-```sh
-npm install @react-native-community/blur lottie-react-native lottie-ios react-native-portalize react-native-reanimated
-```
-
-or 
-
-```sh
-yarn add @react-native-community/blur lottie-react-native lottie-ios react-native-portalize react-native-reanimated
+bun install react-native-beautiful-alerts @react-native-community/blur lottie-react-native lottie-ios react-native-portalize react-native-reanimated
 ```
 
 ## Setup
