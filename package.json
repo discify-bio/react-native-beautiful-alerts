@@ -17,7 +17,6 @@
   "license": "ISC",
   "peerDependencies": {
     "@react-native-community/blur": "*",
-    "lottie-ios": "*",
     "lottie-react-native": "*",
     "react": "*",
     "react-native": "*",
