@@ -1,6 +1,6 @@
 {
   "name": "react-native-beautiful-alerts",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",

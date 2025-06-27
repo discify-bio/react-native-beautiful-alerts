@@ -1,6 +1,6 @@
 import { BlurView } from '@react-native-community/blur'
 import React, { useMemo } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { Platform, StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { theme } from '../constants/theme'
 import { ButtonStyle, Props, ProviderProps } from '../types'
@@ -48,10 +48,12 @@ const ButtonsAlert: React.FC<Props & ProviderProps> = ({ title, description, but
       onLayout={onLayout}
     >
       <View style={{ width: '100%' }}>
-        <BlurView
-          blurRadius={25}
-          style={blurViewStyle}
-        />
+        {Platform.OS === 'ios' && (
+          <BlurView
+            blurRadius={25}
+            style={blurViewStyle}
+          />
+        )}
         <View
           style={containerStyle}
         >

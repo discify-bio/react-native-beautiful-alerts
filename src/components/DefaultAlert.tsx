@@ -1,7 +1,7 @@
 import { BlurView } from '@react-native-community/blur'
 import React, { useMemo } from 'react'
 
-import { Dimensions, StyleSheet, Text, View, ViewStyle } from 'react-native'
+import { Dimensions, Platform, StyleSheet, Text, View, ViewStyle } from 'react-native'
 import Animated from 'react-native-reanimated'
 import Error from '../animations/Error'
 import Success from '../animations/Success'
@@ -65,10 +65,12 @@ const DefaultAlert: React.FC<DefaultProps & ProviderProps> = ({ title, descripti
       <View
         style={styles.container}
       >
-        <BlurView
-          blurRadius={25}
-          style={blurViewStyle}
-        />
+        {Platform.OS === 'ios' && (
+          <BlurView
+            blurRadius={25}
+            style={blurViewStyle}
+          />
+        )}
         <View
           style={styles.wrapper}
         >
